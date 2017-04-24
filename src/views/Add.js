@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 
+import { addTodo } from "../actions/Todos"
+import { connect } from "react-redux"
+
 // For AppBar
 import AppBar from "material-ui/AppBar";
 import ArrowBack from "material-ui/svg-icons/navigation/arrow-back";
@@ -41,15 +44,22 @@ export class Add extends Component {
 
 		this.state = {
 			typeIcon: FOLDER_ICONS[ "inbox" ],
-			typeValue: "inbox"
+			typeValue: "inbox",
+			title: ""
 		};
 
-		this.handleSelect = this.handleSelect.bind( this ); 
 		this.handleBackButtonTap = this.handleBackButtonTap.bind( this ); 
+		this.handleSaveTap = this.handleSaveTap.bind( this ); 
+		this.handleSelect = this.handleSelect.bind( this ); 
 	}
 
 	handleBackButtonTap() {
 		browserHistory.push( "/" );
+	}
+
+	handleSaveTap() {
+		this.props.onSave( this.state.title )
+		this.setState( { title: "" } )
 	}
 
 	handleSelect( event, index, typeValue ) {
@@ -69,27 +79,32 @@ export class Add extends Component {
 				<AppBar
 					title="Add Task"
 					iconElementLeft={ <IconButton onTouchTap={ this.handleBackButtonTap } > <ArrowBack /> </IconButton> }
-					iconElementRight={ <FlatButton label="Save" /> }
+					iconElementRight={ <FlatButton label="Save" onTouchTap={ this.handleSaveTap } /> }
 				/>
 				<Paper rounded={ false } style={ styles.paper }>
 					<FormRow style={ styles.firstRow }>
-						<TextField 
+						<TextField
+							id="title"
 							fullWidth
 							style={ styles.title }
 							floatingLabelText="Title"
 							hintText="Title"
+							onChange={ ( event, value ) => this.setState( { title: value } ) }
+							value={ this.state.title }
 						/>
 					</FormRow>
 					<FormRow>
 						<TextField
+							id="description"
 							fullWidth
 							floatingLabelText="Description"
 							hintText="Description"
 							multiLine
-					/>
+						/>
 					</FormRow>
 					<FormRow leftIcon={ <ActionList /> } >
 						<TextField
+							id="subtasks"
 							fullWidth
 							floatingLabelText="Subtasks"
 							hintText={ "Subtask 1" }
@@ -115,6 +130,7 @@ export class Add extends Component {
 					</FormRow>
 					<FormRow leftIcon={ <ImageTimelapse /> }>
 						<TextField
+							id="estimatedTime"
 							fullWidth
 							floatingLabelText="Estimated Time (h)"
 							hintText="1.5"
@@ -132,4 +148,19 @@ export class Add extends Component {
 	}
 }
 
-export default Add;
+const mapStateToProps = state => {
+	return {
+		todos: state.todos
+	}
+}
+
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onSave: id => {
+			dispatch( addTodo( id ) )
+		}
+	}
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( Add );
