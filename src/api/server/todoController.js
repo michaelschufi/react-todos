@@ -1,6 +1,6 @@
 import models from "../../models"
 
-export let getTodos = ( req, res ) =>  {
+export const getTodos = ( req, res ) =>  {
 	models.Todo.findAll()
 	.then( todos => {
 		res.json( {
