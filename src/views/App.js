@@ -7,6 +7,8 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
+import TodoList from "../components/TodoList";
+
 import FOLDER_ICONS from "../constants/folderIcons.js"
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
@@ -61,6 +63,7 @@ export class App extends Component {
 					</List>
 					<Divider />
 				</Drawer>
+				<TodoList />
 				<FloatingActionButton
 					style={ styleFab }
 					onTouchTap={ this.handleFabTap.bind( this ) }
