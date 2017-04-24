@@ -1,8 +1,8 @@
 import express from "express"
 const router = express.Router()
 
-import { helloWorld } from "./server/todoController"
+import { getTodos } from "./server/todoController"
 
-router.get( "/todos", helloWorld )
+router.get( "/todos", getTodos )
 
 export default router
