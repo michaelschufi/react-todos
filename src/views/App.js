@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router'
 
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
@@ -34,7 +35,7 @@ export class App extends Component {
 	}
 
 	handleFabTap() {
-		this.context.router.history.push( "/add" );
+		browserHistory.push( "/add" );
 	}
 
 	render() {
@@ -74,9 +75,5 @@ export class App extends Component {
 		);
 	}
 }
-
-App.contextTypes = {
-	router: React.PropTypes.object
-} 
 
 export default App;

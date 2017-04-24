@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, browserHistory } from 'react-router';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
@@ -7,17 +7,14 @@ import App from './views/App';
 import Add from './views/Add';
 import NotFound from './views/NotFound';
 
-const Router = () => (
-	<BrowserRouter>
-		<MuiThemeProvider>
-			<Switch>
-				<Route path="/add" exact component={ Add } />
-				<Route path="/" exact component={ App } >
-				</Route>
-				<Route component={ NotFound } />
-			</Switch>
-		</MuiThemeProvider>
-	</BrowserRouter>
+const RootComponent = () => (
+	<MuiThemeProvider>
+		<Router history={ browserHistory }>
+			<Route path="/"  component={ App } />
+			<Route path="/add" component={ Add } />
+			<Route path="*" component={ NotFound } />
+		</Router>
+	</MuiThemeProvider>
 )
 
-export default Router;
+export default RootComponent;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router'
 
 // For AppBar
 import AppBar from "material-ui/AppBar";
@@ -48,7 +49,7 @@ export class Add extends Component {
 	}
 
 	handleBackButtonTap() {
-		this.context.router.history.push( "/" );
+		browserHistory.push( "/" );
 	}
 
 	handleSelect( event, index, typeValue ) {
@@ -130,10 +131,5 @@ export class Add extends Component {
 		);
 	}
 }
-
-
-Add.contextTypes = {
-	router: React.PropTypes.object
-} 
 
 export default Add;
