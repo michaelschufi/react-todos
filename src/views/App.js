@@ -7,7 +7,7 @@ import FloatingActionButton from 'material-ui/FloatingActionButton';
 import { List, ListItem } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 
-import FOLDER_ICONS from "../../imports/folderIcons.js"
+import FOLDER_ICONS from "../constants/folderIcons.js"
 
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
@@ -39,7 +39,7 @@ export class App extends Component {
 		return (
 			<div id="app">
 				<AppBar 
-					title="Home"
+					title="Inbox"
 					onLeftIconButtonTouchTap={ this.toggleDrawer.bind( this ) }
 				/>
 				<Drawer

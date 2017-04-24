@@ -3,11 +3,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import App from './components/App';
-import Add from './components/Add';
-import NotFound from './components/NotFound';
-// import About from './components/About';
-
+import App from './views/App';
+import Add from './views/Add';
+import NotFound from './views/NotFound';
 
 const Router = () => (
 	<BrowserRouter>

@@ -2,20 +2,20 @@ import React, { Component } from 'react';
 
 // For AppBar
 import AppBar from "material-ui/AppBar";
-import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back';
+import ArrowBack from "material-ui/svg-icons/navigation/arrow-back";
 import IconButton from "material-ui/IconButton";
 import FlatButton from "material-ui/FlatButton";
 
 import Paper from "material-ui/Paper";
 
-import FormRow from "../FormRow";
-import DateTimeField from "../DateTimeField";
+import FormRow from "../components/FormRow";
+import DateTimeField from "../components/DateTimeField";
 
 import TextField from "material-ui/TextField";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 
-import FOLDER_ICONS from "../../imports/folderIcons.js"
+import FOLDER_ICONS from "../constants/folderIcons.js";
 
 import ActionList from 'material-ui/svg-icons/action/list';
 import ImageTimelapse from 'material-ui/svg-icons/image/timelapse';
@@ -32,7 +32,7 @@ const styles = {
 	title: {
 		"fontWeight": 500
 	}
-}
+};
 
 export class Add extends Component {
 	constructor( props ) {
@@ -41,7 +41,7 @@ export class Add extends Component {
 		this.state = {
 			typeIcon: FOLDER_ICONS[ "inbox" ],
 			typeValue: "inbox"
-		}
+		};
 
 		this.handleSelect = this.handleSelect.bind( this ); 
 		this.handleBackButtonTap = this.handleBackButtonTap.bind( this ); 
