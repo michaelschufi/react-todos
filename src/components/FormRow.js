@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import { ListItem } from "material-ui/List"
 
 export class FormRow extends Component {
+	static propTypes = {
+		leftIcon: PropTypes.element,
+		leftIconStyle: PropTypes.object,
+		style: PropTypes.object
+	};
+
+	static defaultProps = {
+		leftIcon: null,
+		leftIconStyle: {
+			"paddingTop": "8px"
+		},
+		style: {
+			"margin": "-32px 0 0"
+		}
+	};
+
 	constructor( props ) {
 		super( props );
 		if ( this.props.leftIcon ) {
@@ -33,14 +50,5 @@ export class FormRow extends Component {
 	}
 }
 
-FormRow.defaultProps = {
-	leftIcon: null,
-	leftIconStyle: {
-		"paddingTop": "8px"
-	},
-	style: {
-		"margin": "-32px 0 0"
-	}
-};
 
 export default FormRow;

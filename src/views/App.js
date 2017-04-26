@@ -26,16 +26,20 @@ export class App extends Component {
 		this.state = { 
 			drawerOpen: false
 		};
+
+		this.handleNavigation = this.handleNavigation.bind( this )
+		this.toggleDrawer = this.toggleDrawer.bind( this )
 	}
 
 	toggleDrawer() {
-		this.setState( { 
+		this.setState( {
 			drawerOpen: !this.state.drawerOpen
 		} );
 	}
 
-	handleFabTap() {
-		browserHistory.push( "/add" );
+	handleNavigation( path ) {
+		browserHistory.push( path );
+		this.toggleDrawer()
 	}
 
 	render() {
@@ -43,31 +47,59 @@ export class App extends Component {
 			<div id="app">
 				<AppBar 
 					title="Inbox"
-					onLeftIconButtonTouchTap={ this.toggleDrawer.bind( this ) }
+					onLeftIconButtonTouchTap={ this.toggleDrawer }
 				/>
 				<Drawer
 					docked={ false }
 					open={ this.state.drawerOpen }
-					onRequestChange={ this.toggleDrawer.bind( this ) }
+					onRequestChange={ this.toggleDrawer }
 				>
 					<List>
-						<ListItem primaryText="Inbox" leftIcon={ FOLDER_ICONS[ "inbox" ] } />
+						<ListItem 
+							primaryText="Inbox"
+							leftIcon={ FOLDER_ICONS[ "inbox" ] }
+							onTouchTap={ () => this.handleNavigation( "/inbox" ) }
+						/>
 					</List>
 					<Divider />
 					<List>
-						<ListItem primaryText="Today" leftIcon={ FOLDER_ICONS[ "today" ] } />
-						<ListItem primaryText="Tomorrow" leftIcon={ FOLDER_ICONS[ "tomorrow" ] } />
-						<ListItem primaryText="Next" leftIcon={ FOLDER_ICONS[ "next" ] } />
-						<ListItem primaryText="Scheduled" leftIcon={ FOLDER_ICONS[ "scheduled" ] } />
-						<ListItem primaryText="Someday" leftIcon={ FOLDER_ICONS[ "someday" ] } />
-						<ListItem primaryText="Waiting" leftIcon={ FOLDER_ICONS[ "waiting" ] } />
+						<ListItem
+							primaryText="Today"
+							leftIcon={ FOLDER_ICONS[ "today" ] }
+							onTouchTap={ () => this.handleNavigation( "/today" ) }
+						/>
+						<ListItem 
+							primaryText="Tomorrow"
+							leftIcon={ FOLDER_ICONS[ "tomorrow" ] }
+							onTouchTap={ () => this.handleNavigation( "/tomorrow" ) }
+						/>
+						<ListItem 
+							primaryText="Next"
+							leftIcon={ FOLDER_ICONS[ "next" ] }
+							onTouchTap={ () => this.handleNavigation( "/next" ) }
+						/>
+						<ListItem 
+							primaryText="Scheduled"
+							leftIcon={ FOLDER_ICONS[ "scheduled" ] }
+							onTouchTap={ () => this.handleNavigation( "/scheduled" ) }
+						/>
+						<ListItem 
+							primaryText="Someday"
+							leftIcon={ FOLDER_ICONS[ "someday" ] }
+							onTouchTap={ () => this.handleNavigation( "/someday" ) }
+						/>
+						<ListItem 
+							primaryText="Waiting"
+							leftIcon={ FOLDER_ICONS[ "waiting" ] }
+							onTouchTap={ () => this.handleNavigation( "/waiting" ) }
+						/>
 					</List>
 					<Divider />
 				</Drawer>
-				<TodoList />
+				<TodoList folder={ this.props.params.folder } />
 				<FloatingActionButton
 					style={ styleFab }
-					onTouchTap={ this.handleFabTap.bind( this ) }
+					onTouchTap={ () => this.handleNavigation( "/add" ) }
 				>
       				<ContentAdd />
       			</FloatingActionButton>

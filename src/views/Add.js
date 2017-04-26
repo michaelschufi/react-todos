@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 
-import { addTodo } from "../actions/Todos"
+import { addTodo } from "../modules/todos"
 import { connect } from "react-redux"
 
 // For AppBar
@@ -28,7 +28,7 @@ import ActionSchedule from 'material-ui/svg-icons/action/schedule';
 
 const styles = {
 	paper: {
-		"padding": "0 5vmin"
+		"padding": "0 2vmin"
 	},
 	firstRow: {
 		"margin": "-16px 0 0"
@@ -44,8 +44,11 @@ export class Add extends Component {
 
 		this.state = {
 			typeIcon: FOLDER_ICONS[ "inbox" ],
-			typeValue: "inbox",
-			title: ""
+			folder: "inbox",
+			title: "",
+			description: "",
+			subtasks: "",
+			estimatedTime: ""
 		};
 
 		this.handleBackButtonTap = this.handleBackButtonTap.bind( this ); 
@@ -58,19 +61,20 @@ export class Add extends Component {
 	}
 
 	handleSaveTap() {
-		this.props.onSave( this.state.title )
-		this.setState( { title: "" } )
+		this.props.onSave( {
+			title: this.state.title,
+			description: this.state.description,
+			subtasks: ( this.state.subtasks.indexOf( "\n" ) === -1 ? [] : this.state.subtasks.split( "\n" ) ),
+			folder: this.state.folder,
+			estimatedTime: this.state.estimatedTime
+		} )
 	}
 
-	handleSelect( event, index, typeValue ) {
+	handleSelect( event, index, folder ) {
 		this.setState( { 
-			typeIcon: FOLDER_ICONS[ typeValue ],
-			typeValue: typeValue
+			typeIcon: FOLDER_ICONS[ folder ],
+			folder: folder
 		} );
-	}
-
-	onDeadlineUpdate( date ) {
-		// console.log( date )
 	}
 
 	render() {
@@ -81,21 +85,22 @@ export class Add extends Component {
 					iconElementLeft={ <IconButton onTouchTap={ this.handleBackButtonTap } > <ArrowBack /> </IconButton> }
 					iconElementRight={ <FlatButton label="Save" onTouchTap={ this.handleSaveTap } /> }
 				/>
+				{ /*<a onClick={ () => browserHistory.push( "/show/1" ) } >Link</a>*/ }
 				<Paper rounded={ false } style={ styles.paper }>
 					<FormRow style={ styles.firstRow }>
 						<TextField
-							id="title"
+							value={ this.state.title }
+							onChange={ e => this.setState( { title: e.target.value } ) }
 							fullWidth
 							style={ styles.title }
 							floatingLabelText="Title"
 							hintText="Title"
-							onChange={ ( event, value ) => this.setState( { title: value } ) }
-							value={ this.state.title }
 						/>
 					</FormRow>
 					<FormRow>
 						<TextField
-							id="description"
+							value={ this.state.description }
+							onChange={ e => this.setState( { description: e.target.value } ) }
 							fullWidth
 							floatingLabelText="Description"
 							hintText="Description"
@@ -104,7 +109,8 @@ export class Add extends Component {
 					</FormRow>
 					<FormRow leftIcon={ <ActionList /> } >
 						<TextField
-							id="subtasks"
+							value={ this.state.subtasks }
+							onChange={ e => this.setState( { subtasks: e.target.value } ) }
 							fullWidth
 							floatingLabelText="Subtasks"
 							hintText={ "Subtask 1" }
@@ -116,7 +122,7 @@ export class Add extends Component {
 							fullWidth
 							floatingLabelText="Folder"
 							hintText="Type"
-							value={ this.state.typeValue }
+							value={ this.state.folder }
 							onChange={ this.handleSelect }
 						>
 							<MenuItem value="inbox" primaryText={ "Inbox" } leftIcon={ FOLDER_ICONS[ "inbox" ] } />
@@ -130,17 +136,18 @@ export class Add extends Component {
 					</FormRow>
 					<FormRow leftIcon={ <ImageTimelapse /> }>
 						<TextField
-							id="estimatedTime"
+							value={ this.state.estimatedTime }
+							onChange={ e => this.setState( { estimatedTime: e.target.value } ) }
 							fullWidth
-							floatingLabelText="Estimated Time (h)"
-							hintText="1.5"
+							floatingLabelText="Estimated Time"
+							hintText="1:30 / 1.5"
 						/>
 					</FormRow>
 					<FormRow leftIcon={ <ImageTimer /> }>
-						<DateTimeField floatingLabelText="Deadline" onWillUpdate={ this.onDeadlineUpdate } />
+						<DateTimeField floatingLabelText="Deadline" onChange={ ( dateString, timeString ) => this.setState( { deadlineDate: dateString, deadlineTime: timeString } ) } />
 					</FormRow>
 					<FormRow leftIcon={ <ActionSchedule /> }>
-						<DateTimeField floatingLabelText="Start Time" />
+						<DateTimeField floatingLabelText="Start" onChange={ ( dateString, timeString ) => this.setState( { startDate: dateString, startTime: timeString } ) } />
 					</FormRow>
 				</Paper>
 			</div>
@@ -157,8 +164,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onSave: id => {
-			dispatch( addTodo( id ) )
+		onSave: todo => {
+			dispatch( addTodo( todo ) )
 		}
 	}
 }

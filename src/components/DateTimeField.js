@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import TextField from "material-ui/TextField";
 import DatePicker from "material-ui/DatePicker";
@@ -33,6 +34,16 @@ const styles = {
 }
 
 export class DateTimeField extends Component {
+	static propTypes = {
+		floatingLabelText: PropTypes.string,
+		onChange: PropTypes.func
+	};
+
+	static defaultProps = {
+		floatingLabelText: "Date",
+		onChange: function(){}
+	};
+
 	constructor( props ) {
 		super( props );
 
@@ -114,13 +125,15 @@ export class DateTimeField extends Component {
 	}
 
 	componentWillUpdate( nextProps, nextState ) {
-		this.props.onWillUpdate( nextState.date );
+		if ( this.state.dateString !== nextState.dateString || this.state.timeString !== nextState.timeString ) {
+			this.props.onChange( nextState.dateString, nextState.timeString )
+		}
 	}
 
 	render() {
 		return (
 			<div style={ styles.div }>
-				<TextField 
+				<TextField
 					fullWidth
 					floatingLabelFixed
 					floatingLabelText={ this.props.floatingLabelText }
@@ -157,12 +170,5 @@ export class DateTimeField extends Component {
 		);
 	}
 }
-
-DateTimeField.defaultProps = {
-	floatingLabelText: "Date",
-	onWillUpdate: () => {
-		// console.log( "updating" );
-	}
-};
 
 export default DateTimeField;

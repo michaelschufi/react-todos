@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { List } from "material-ui/List"
 import TodoItem from "./TodoItem"
 
-import { toggleTodo } from "../actions/Todos" 
+import { browserHistory } from "react-router"
+
+import { toggleTodo, deleteTodo } from "../modules/todos"
 import { connect } from 'react-redux';
 
 export class TodoList extends Component {
@@ -15,29 +17,49 @@ export class TodoList extends Component {
 		} ) )
 	};
 
+	handleTextTap( id ) {
+		browserHistory.push( "/show/" + id )
+	}
+
 	render() {
+		let todoItems = this.props.todos.map( todo => {
+			return <TodoItem key={ todo.id } { ...todo } onCheck={ this.props.toggleTodo } onTextTap={ this.handleTextTap } onDelete={ this.props.deleteTodo } />
+		} )
+
+		let renderList;
+		if ( todoItems.length === 0  ) {
+			renderList = "No to-dos in this folder."
+		} else {
+			renderList = todoItems
+		}
+
 		return (
 			<div>
 				<List>
-					{ this.props.todos.map( todo => {
-						return <TodoItem key={ todo.id } { ...todo } onCheck={ this.props.onCheck } />
-					} ) }
+					{ renderList }
 				</List>
 			</div>
 		);
 	}
 }
 
-const mapStateToProps = state => {
+const filterTodos = ( todos, folder ) => {
+	return todos.filter( todo => { return todo.folder === folder } )
+}
+
+const mapStateToProps = ( state, ownProps ) => {
 	return {
-		todos: state.todos
+		todos: filterTodos( state.todos, ownProps.folder ) 
 	}
 }
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onCheck: id => {
+		toggleTodo: id => {
 			dispatch( toggleTodo( id ) )
+		},
+		deleteTodo: id => {
+			dispatch( deleteTodo( id ) )
 		}
 	}
 }

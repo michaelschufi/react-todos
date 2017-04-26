@@ -8,7 +8,7 @@ import ActionDateRange from "material-ui/svg-icons/action/date-range";
 import ImageWbSunny from "material-ui/svg-icons/image/wb-sunny";
 import ActionWatchLater from "material-ui/svg-icons/action/watch-later";
 
-const FOLDER_ICONS = {
+export const FOLDER_ICONS = {
 	inbox: <ContentInbox />,
 	today: <ActionToday />,
 	tomorrow: <ActionEvent />,
