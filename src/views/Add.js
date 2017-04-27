@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 
 import { addTodo } from "../modules/todos"
-import { connect } from "react-redux"
+import { connect, store } from "react-redux"
 
 // For AppBar
 import AppBar from "material-ui/AppBar";
@@ -61,13 +61,19 @@ export class Add extends Component {
 	}
 
 	handleSaveTap() {
-		this.props.onSave( {
+		let subtasks = null;
+		if ( this.state.subtasks.indexOf( "\n" ) !== -1 ) {
+			subtasks = this.state.subtasks.split( "\n" )
+		}
+
+		console.log( subtasks )
+		
+		this.props.addTodo( {
 			title: this.state.title,
 			description: this.state.description,
-			subtasks: ( this.state.subtasks.indexOf( "\n" ) === -1 ? [] : this.state.subtasks.split( "\n" ) ),
 			folder: this.state.folder,
 			estimatedTime: this.state.estimatedTime
-		} )
+		}, subtasks )
 	}
 
 	handleSelect( event, index, folder ) {
@@ -162,10 +168,10 @@ const mapStateToProps = state => {
 }
 
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = ( dispatch, ownProps ) => {
 	return {
-		onSave: todo => {
-			dispatch( addTodo( todo ) )
+		addTodo: ( todo, subtasks=null ) => {
+			dispatch( addTodo( todo, subtasks ) )
 		}
 	}
 }

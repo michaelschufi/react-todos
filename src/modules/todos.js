@@ -1,5 +1,6 @@
+import { addSubtask } from "./subtasks"
+
 const ADD_TODO = "react-todos/todos/ADD_TODO"
-const ADD_SUBTASK = "react-todos/todos/ADD_SUBTASK"
 const DELETE_TODO = "react-todos/todos/DELETE_TODO"
 const TOGGLE_TODO = "react-todos/todos/TOGGLE_TODO"
 
@@ -8,14 +9,10 @@ const initialState = []
 export default function todos( state = initialState, action ) {
 	switch ( action.type ) {
 		case ADD_TODO:
-			let id = ( state.length === 0 ) ? 0 : state.reduce( ( nextId, todo ) => { 
-				return ( todo.id >= nextId ? ( todo.id + 1 ) : nextId ) 
-			}, 0 );
-
 			return [
 				...state,
 				{
-					id: id,
+					id: action.id,
 					title: action.todo.title || "",
 					description: action.todo.description || "",
 					subtasks: action.todo.subtasks || null,
@@ -26,16 +23,6 @@ export default function todos( state = initialState, action ) {
 					done: false
 				}
 			]
-
-		case ADD_SUBTASK:
-			return state.map( todo => {
-				if ( todo.id === action.id ) {
-					return Object.assign( {}, todo, {
-						subtasks: [ ...todo.subtasks, action.text ]
-					} )
-				}
-				return todo
-			} )
 
 		case TOGGLE_TODO:
 			return state.map( todo => {
@@ -48,25 +35,31 @@ export default function todos( state = initialState, action ) {
 			} )
 
 		case DELETE_TODO:
-			console.log()
 			return state.filter( todo => { return todo.id !== action.id } )
 		default:
 			return state
 	}
 }
 
-export function addTodo( todo ) {
-	return {
-		type: ADD_TODO,
-		todo
-	}
-}
+// export function addTodo( todo ) {
+// 	return {
+// 		type: ADD_TODO,
+// 		todo
+// 	}
+// }
 
-export function addSubtask( id, text ) {
-	return {
-		type: ADD_SUBTASK,
-		id,
-		text
+export function addTodo( todo, subtasks ) {
+	return ( dispatch, getState ) => {
+		let id = ( getState().todos.length === 0 ) ? 0 : getState().todos.reduce( ( nextId, todo ) => { 
+			return ( todo.id >= nextId ? ( todo.id + 1 ) : nextId ) 
+		}, 0 )
+
+		dispatch( {
+			type: ADD_TODO,
+			id: id,
+			todo: todo
+		} )
+		if( subtasks ) { subtasks.forEach( text => dispatch( addSubtask( id, text ) ) ) }
 	}
 }
 

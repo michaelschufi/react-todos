@@ -6,6 +6,7 @@ import TodoItem from "./TodoItem"
 import { browserHistory } from "react-router"
 
 import { toggleTodo, deleteTodo } from "../modules/todos"
+import { deleteAllSubtasks } from "../modules/subtasks"
 import { connect } from 'react-redux';
 
 export class TodoList extends Component {
@@ -60,6 +61,7 @@ const mapDispatchToProps = dispatch => {
 		},
 		deleteTodo: id => {
 			dispatch( deleteTodo( id ) )
+			dispatch( deleteAllSubtasks( id ) )
 		}
 	}
 }
