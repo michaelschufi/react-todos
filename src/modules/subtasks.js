@@ -1,5 +1,6 @@
 const ADD_SUBTASK = "react-subtodos/subtasks/ADD_SUBTASK"
 const TOGGLE_SUBTASK = "react-subtodos/subtasks/TOGGLE_SUBTASK"
+const UPDATE_SUBTASK = "react-subtodos/subtasks/UPDATE_SUBTASK"
 const DELETE_SUBTASK = "react-subtodos/subtasks/DELETE_SUBTASK"
 const DELETE_ALL_SUBTASKS = "react-subtodos/subtasks/DELETE_ALL_SUBTASKS"
 
@@ -31,12 +32,21 @@ export default function subtasks( state = initialState, action ) {
 				}
 				return subtask
 			} )
-
-		case DELETE_ALL_SUBTASKS:
-			return state.filter( subtask => { return subtask.todoFk !== action.todoFk } )
+		case UPDATE_SUBTASK:
+			return state.map( subtask => {
+				if ( subtask.id === action.id ) {
+					return Object.assign( {}, subtask, {
+						text: action.text
+					} )
+				}
+				return subtask
+			} )
 
 		case DELETE_SUBTASK:
 			return state.filter( subtask => { return subtask.id !== action.id } )
+
+		case DELETE_ALL_SUBTASKS:
+			return state.filter( subtask => { return subtask.todoFk !== action.todoFk } )
 		default:
 			return state
 	}
@@ -54,6 +64,14 @@ export function toggleSubtask( id ) {
 	return {
 		type: TOGGLE_SUBTASK,
 		id
+	}
+}
+
+export function updateSubtask( id, text ) {
+	return {
+		type: UPDATE_SUBTASK,
+		id,
+		text
 	}
 }
 

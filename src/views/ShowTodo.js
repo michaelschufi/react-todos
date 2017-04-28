@@ -18,7 +18,7 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Subtask from "../components/Subtask"
 import AddSubtask from "../components/AddSubtask"
 
-import { addSubtask } from "../modules/todos"
+import { addSubtask, toggleSubtask, updateSubtask, deleteSubtask } from "../modules/subtasks"
 
 const styles = {
 	paper: {
@@ -50,8 +50,6 @@ export class ShowTodo extends Component {
 		browserHistory.goBack()
 	}
 
-	handleTextTap() {}
-
 	render() {
 		return (
 			<div>
@@ -82,8 +80,18 @@ export class ShowTodo extends Component {
 
 					<Divider style={ styles.divider } />
 
-					{ this.props.todo.subtasks.map( ( subtask, id ) => {
-						return <Subtask key={ id } text={ subtask } />
+					{ this.props.subtasks.map( ( subtask ) => {
+						return (
+							<Subtask 
+								key={ subtask.id }
+								id={ subtask.id }
+								text={ subtask.text }
+								checked={ subtask.done }
+								onCheck={ this.props.toggleSubtask }
+								onUpdate={ this.props.updateSubtask }
+								onDelete={ this.props.deleteSubtask }
+							/>
+						)
 					} ) }
 					<AddSubtask addSubtask={ this.props.addSubtask } todoId={ this.props.todo.id } text="New Task" />
 				</Paper>
@@ -95,6 +103,7 @@ export class ShowTodo extends Component {
 const mapStateToProps = ( state, ownProps ) => {
 	return {
 		todo: state.todos.find( todo => { return todo.id === Number( ownProps.params.id ) } ),
+		subtasks: state.subtasks.filter( subtask => { return subtask.todoFk === Number( ownProps.params.id ) } ),
 		history: state.history
 	}
 }
@@ -103,6 +112,15 @@ const mapDispatchToProps = dispatch => {
 	return {
 		addSubtask: ( id, text ) => {
 			dispatch( addSubtask( id, text ) )
+		},
+		toggleSubtask: ( id ) => {
+			dispatch( toggleSubtask( id ) )
+		},
+		updateSubtask: ( id, text ) => {
+			dispatch( updateSubtask( id, text ) )
+		},
+		deleteSubtask: ( id ) => {
+			dispatch( deleteSubtask( id ) )
 		}
 	}
 }

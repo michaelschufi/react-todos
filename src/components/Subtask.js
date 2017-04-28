@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types"
 
 import TextField from "material-ui/TextField"
 import Checkbox from "material-ui/Checkbox"
@@ -21,6 +22,15 @@ const styles = {
 }
 
 export class Subtask extends Component {
+	static propTypes = {
+			id: PropTypes.number.isRequired,
+			text: PropTypes.string.isRequired,
+			checked: PropTypes.bool.isRequired,
+			onCheck: PropTypes.func.isRequired,
+			onUpdate: PropTypes.func.isRequired,
+			onDelete: PropTypes.func.isRequired
+	};
+
 	constructor( props ) {
 		super( props )
 
@@ -41,18 +51,23 @@ export class Subtask extends Component {
 		this.setState( { focused: false } )
 
 		if ( this.state.text !== event.target.value ) {
-			console.log( "update todo subtask\n" + event.target.value )
+			this.props.onUpdate( this.props.id, event.target.value )
 		}
 	}
 
 	render() {
 		return (
 			<div style={ styles.wrapper }>
-				<Checkbox style={ styles.checkbox } />
-				<TextField 
-					fullWidth 
+				<Checkbox 
+					style={ styles.checkbox }
+					checked={ this.props.checked }
+					onCheck={ () => this.props.onCheck( this.props.id ) }
+				/>
+				<TextField
+					fullWidth
 					defaultValue={ this.props.text }
 					underlineShow={ this.state.focused }
+					disabled={ this.props.checked }
 					onTouchTap={ this.handleTouchTap }
 					onBlur={ this.handleBlur }
 				/>

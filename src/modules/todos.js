@@ -41,13 +41,6 @@ export default function todos( state = initialState, action ) {
 	}
 }
 
-// export function addTodo( todo ) {
-// 	return {
-// 		type: ADD_TODO,
-// 		todo
-// 	}
-// }
-
 export function addTodo( todo, subtasks ) {
 	return ( dispatch, getState ) => {
 		let id = ( getState().todos.length === 0 ) ? 0 : getState().todos.reduce( ( nextId, todo ) => { 

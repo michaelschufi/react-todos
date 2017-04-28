@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { browserHistory } from 'react-router'
 
 import { addTodo } from "../modules/todos"
-import { connect, store } from "react-redux"
+import { connect } from "react-redux"
 
 // For AppBar
 import AppBar from "material-ui/AppBar";
@@ -66,8 +66,6 @@ export class Add extends Component {
 			subtasks = this.state.subtasks.split( "\n" )
 		}
 
-		console.log( subtasks )
-		
 		this.props.addTodo( {
 			title: this.state.title,
 			description: this.state.description,
