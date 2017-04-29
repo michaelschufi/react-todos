@@ -64,6 +64,8 @@ export class Add extends Component {
 		let subtasks = null;
 		if ( this.state.subtasks.indexOf( "\n" ) !== -1 ) {
 			subtasks = this.state.subtasks.split( "\n" )
+		} else if ( this.state.subtasks.length > 0 ) {
+			subtasks = [ this.state.subtasks ]
 		}
 
 		this.props.addTodo( {
