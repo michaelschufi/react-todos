@@ -14,7 +14,8 @@ const styles = {
 	},
 	checkbox: { 
 		width: "auto",
-		display: "inline-block"
+		display: "inline-block",
+		// paddingRight: "16px"
 	},
 	deleteButton: {
 		color: "#B7B7B7"

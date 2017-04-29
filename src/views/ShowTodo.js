@@ -10,7 +10,6 @@ import MenuItem from "material-ui/MenuItem"
 
 import Paper from "material-ui/Paper"
 import Checkbox from "material-ui/Checkbox"
-import Divider from 'material-ui/Divider';
 
 import ImageEdit from "material-ui/svg-icons/image/edit"
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
@@ -18,11 +17,19 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Subtask from "../components/Subtask"
 import AddSubtask from "../components/AddSubtask"
 
+
+import { List, ListItem } from "material-ui/List"
+import Subheader from "material-ui/Subheader"
+import FOLDER_ICONS from "../constants/folderIcons"
+import ImageTimelapse from "material-ui/svg-icons/image/timelapse"
+// import TextField from "material-ui/TextField"
+
+import { toggleTodo } from "../modules/todos"
 import { addSubtask, toggleSubtask, updateSubtask, deleteSubtask } from "../modules/subtasks"
 
 const styles = {
 	paper: {
-		"padding": "5vmin"
+		"padding": "4vmin"
 	}, 
 	buttonStyle: {
 		color: 'white'
@@ -33,15 +40,30 @@ const styles = {
 	description: {
 		fontWeight: 400
 	},
+	subtaskHeader: {
+		paddingLeft: 0
+	},
 	divider: {
-		marginTop: "24px",
-		marginBottom: "16px"
+		marginTop: "16px",
+		marginBottom: "8px"
+	},
+	wrapper: {
+		margin: "24px 0 0 16px"
+	},
+	list: {
+		marginTop: "8px"
+	},
+	listItem: {
+		paddingLeft: "56px"
+	},
+	leftIcon: {
+		fill: ""
 	}
 }
 
 export class ShowTodo extends Component {
 	constructor( props ) {
-		super( props )
+		super( props ) 
 
 		this.handleBackButtonTap = this.handleBackButtonTap.bind( this )
 	}
@@ -54,8 +76,7 @@ export class ShowTodo extends Component {
 		return (
 			<div>
 				<AppBar
-					// title={ this.props.todo.title }
-					// title="Details"
+					title={ "Details" }
 					iconElementLeft={ <IconButton onTouchTap={ this.handleBackButtonTap } > <ArrowBack /> </IconButton> }
 					iconElementRight={
 						<div>
@@ -74,26 +95,50 @@ export class ShowTodo extends Component {
 					}
 				/>
 				<Paper rounded={ false } style={ styles.paper } >
-					<Checkbox style={ styles.title } label={ this.props.todo.title } />
+					<Checkbox style={ styles.title }
+						checked={ this.props.todo.done }
+						label={ this.props.todo.title }
+						onCheck={ () => this.props.toggleTodo( this.props.todo.id ) }
+					/>
 
-					<p style={ styles.description }>{ this.props.todo.description }</p>
+					<div style={ styles.wrapper }>
+						<p style={ styles.description }>{ this.props.todo.description }</p>
+						
+						<Subheader style={ styles.subtaskHeader }>Subtasks</Subheader>
+						
+						{ this.props.subtasks.map( ( subtask ) => {
+							return (
+								<Subtask 
+									key={ subtask.id }
+									id={ subtask.id }
+									text={ subtask.text }
+									checked={ subtask.done }
+									onCheck={ this.props.toggleSubtask }
+									onUpdate={ this.props.updateSubtask }
+									onDelete={ this.props.deleteSubtask }
+								/>
+							)
+						} ) }
+						<AddSubtask addSubtask={ this.props.addSubtask } todoId={ this.props.todo.id } text="New Task" />
+						
+					</div>
 
-					<Divider style={ styles.divider } />
-
-					{ this.props.subtasks.map( ( subtask ) => {
-						return (
-							<Subtask 
-								key={ subtask.id }
-								id={ subtask.id }
-								text={ subtask.text }
-								checked={ subtask.done }
-								onCheck={ this.props.toggleSubtask }
-								onUpdate={ this.props.updateSubtask }
-								onDelete={ this.props.deleteSubtask }
-							/>
-						)
-					} ) }
-					<AddSubtask addSubtask={ this.props.addSubtask } todoId={ this.props.todo.id } text="New Task" />
+					<List style={ styles.list }>
+					<Subheader>Folder</Subheader>
+						<ListItem
+							innerDivStyle={ styles.listItem }
+							leftIcon={ React.cloneElement( FOLDER_ICONS[ this.props.todo.folder ], { style: styles.leftIcon } ) }
+							primaryText={ this.props.todo.folder.replace( /(.)(.*)/, ( matches, m1, m2 ) => {
+								return m1.toUpperCase() + m2
+							} ) }
+						/>
+						<Subheader>Estimated Time</Subheader>
+						<ListItem
+							innerDivStyle={ styles.listItem }
+							leftIcon={ <ImageTimelapse style={ styles.leftIcon } /> }
+							primaryText={ ( this.props.todo.estimatedTime / 60 ).toString().replace( /(.*)\..*/, "$1" ) + ":" + this.props.todo.estimatedTime % 60 + " h" }
+						/>
+					</List>
 				</Paper>
 			</div>
 		);
@@ -110,6 +155,9 @@ const mapStateToProps = ( state, ownProps ) => {
 
 const mapDispatchToProps = dispatch => {
 	return {
+		toggleTodo: ( id ) => {
+			dispatch( toggleTodo( id ) )
+		},
 		addSubtask: ( id, text ) => {
 			dispatch( addSubtask( id, text ) )
 		},
