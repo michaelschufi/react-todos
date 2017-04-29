@@ -1,8 +1,6 @@
 Todo app with React : )
 
 ## What's next
-- Subtask out of todo state
-- subtask actions ( check, update, delete )
 - finish detail view
 - edit todo
 - duplicate todo
