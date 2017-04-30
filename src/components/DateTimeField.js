@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import moment from "moment"
 import TextField from "material-ui/TextField";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator"
 import DatePicker from "material-ui/DatePicker";
 import TimePicker from "material-ui/TimePicker";
 import IconButton from "material-ui/IconButton";
 import HardwareKeyboardArrowDown from 'material-ui/svg-icons/hardware/keyboard-arrow-down';
+
 
 const dateToString = ( date, toTime=false ) => {   
 	if ( ! toTime ) {
@@ -35,6 +38,7 @@ const styles = {
 
 export class DateTimeField extends Component {
 	static propTypes = {
+		fixedDate: PropTypes.object,
 		floatingLabelText: PropTypes.string,
 		onChange: PropTypes.func
 	};
@@ -47,9 +51,10 @@ export class DateTimeField extends Component {
 	constructor( props ) {
 		super( props );
 
-		let date = new Date();
+		// let date = this.props.fixedDate;
+		// let date = new Date();
 		this.state = {
-			date: date,
+			date: this.props.fixedDate || new Date(),
 			dateString: "",
 			timeString: ""
 		}
@@ -100,7 +105,12 @@ export class DateTimeField extends Component {
 	}
 
 	handleTimeFieldChange( event ) {
-		this.setState( { timeString: event.target.value } );
+		if ( this.state.dateString || event.target.value !== "" ) {
+			this.setState( { dateString: dateToString( this.state.date ) } )
+		}
+		this.setState( { 
+			timeString: event.target.value
+		} );
 	}
 
 	handlePickerChange( event, newDate, picker ) {
@@ -124,6 +134,15 @@ export class DateTimeField extends Component {
 		}  );
 	}
 
+	componentWillMount() {
+		ValidatorForm.addValidationRule( "isDateString", value => {
+			return moment( value, "YYYY-MM-DD", true ).isValid() === true || value === ""
+		} )
+		ValidatorForm.addValidationRule( "isTimeString", value => {
+			return moment( value, "HH:mm", true ).isValid() === true || value === ""
+		} )
+	}
+
 	componentWillUpdate( nextProps, nextState ) {
 		if ( this.state.dateString !== nextState.dateString || this.state.timeString !== nextState.timeString ) {
 			this.props.onChange( nextState.dateString, nextState.timeString )
@@ -133,21 +152,25 @@ export class DateTimeField extends Component {
 	render() {
 		return (
 			<div style={ styles.div }>
-				<TextField
-					fullWidth
-					floatingLabelFixed
-					floatingLabelText={ this.props.floatingLabelText }
-					hintText={ dateToString( this.state.date ) }
-					value={ this.state.dateString }
-					onChange={ this.handleDateFieldChange }
-				/>
-				<IconButton onTouchTap={ this.handleDatePickerButtonTap } style={ styles.pickerIcon } > <HardwareKeyboardArrowDown /> </IconButton>
-				<TextField
+				{ this.props.fixedDate ? null : ( <TextValidator
+						name="date"
+						validators={ [ "isDateString" ] }
+						fullWidth
+						floatingLabelFixed
+						floatingLabelText={ this.props.floatingLabelText }
+						hintText={ dateToString( new Date() ) }
+						value={ this.state.dateString }
+						onChange={ this.handleDateFieldChange }
+				/> ) }
+				{ ( this.props.fixedDate ) ? null : <IconButton onTouchTap={ this.handleDatePickerButtonTap } style={ styles.pickerIcon } > <HardwareKeyboardArrowDown /> </IconButton> }
+				<TextValidator
+					name="date"
+					validators={ [ "isTimeString" ] }
 					fullWidth
 					floatingLabelFixed
 					style={ styles.dateField }
 					floatingLabelText={ this.props.floatingLabelText }
-					hintText={ dateToString( this.state.date, true ) }
+					hintText={ dateToString( new Date(), true ) }
 					value={ this.state.timeString }
 					onChange={ this.handleTimeFieldChange }
 				/>
@@ -161,6 +184,7 @@ export class DateTimeField extends Component {
 				/>
 				<TimePicker
 					disabled
+					format="24hr"
 					value={ this.state.date } 
 					onChange={ ( event, newDate ) => { this.handlePickerChange( event, newDate, "time" ) } }
 					style={ styles.timePicker }
