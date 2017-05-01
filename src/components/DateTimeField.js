@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import moment from "moment"
-import TextField from "material-ui/TextField";
 import { ValidatorForm, TextValidator } from "react-material-ui-form-validator"
 import DatePicker from "material-ui/DatePicker";
 import TimePicker from "material-ui/TimePicker";

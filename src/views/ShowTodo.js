@@ -22,7 +22,6 @@ import { List, ListItem } from "material-ui/List"
 import Subheader from "material-ui/Subheader"
 import FOLDER_ICONS from "../constants/folderIcons"
 import ImageTimelapse from "material-ui/svg-icons/image/timelapse"
-// import TextField from "material-ui/TextField"
 
 import { toggleTodo } from "../modules/todos"
 import { addSubtask, toggleSubtask, updateSubtask, deleteSubtask } from "../modules/subtasks"
@@ -132,12 +131,18 @@ export class ShowTodo extends Component {
 								return m1.toUpperCase() + m2
 							} ) }
 						/>
-						<Subheader>Estimated Time</Subheader>
-						<ListItem
-							innerDivStyle={ styles.listItem }
-							leftIcon={ <ImageTimelapse style={ styles.leftIcon } /> }
-							primaryText={ ( this.props.todo.estimatedTime / 60 ).toString().replace( /(.*)\..*/, "$1" ) + ":" + this.props.todo.estimatedTime % 60 + " h" }
-						/>
+
+						{ this.props.todo.estimatedTime !== null ? ( 
+							<div>
+								<Subheader>Estimated Time</Subheader>
+
+								<ListItem
+								innerDivStyle={ styles.listItem }
+								leftIcon={ <ImageTimelapse style={ styles.leftIcon } /> }
+								primaryText={ ( this.props.todo.estimatedTime / 60 ).toString().replace( /(.*)\..*/, "$1" ) + ":" + this.props.todo.estimatedTime % 60 + " h" }
+								/>
+							</div>
+						) : null }
 					</List>
 				</Paper>
 			</div>

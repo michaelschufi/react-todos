@@ -46,7 +46,9 @@ export class App extends Component {
 		return (
 			<div id="app">
 				<AppBar 
-					title="Inbox"
+					title={ this.props.params.folder.replace( /(.)(.*)/, ( matches, m1, m2 ) => {
+						return m1.toUpperCase() + m2
+					} ) || "App" }
 					onLeftIconButtonTouchTap={ this.toggleDrawer }
 				/>
 				<Drawer

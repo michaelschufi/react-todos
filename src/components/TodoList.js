@@ -5,6 +5,8 @@ import TodoItem from "./TodoItem"
 
 import { browserHistory } from "react-router"
 
+import moment from "moment"
+
 import { toggleTodo, deleteTodo } from "../modules/todos"
 import { deleteAllSubtasks } from "../modules/subtasks"
 import { connect } from 'react-redux';
@@ -45,7 +47,27 @@ export class TodoList extends Component {
 }
 
 const filterTodos = ( todos, folder ) => {
-	return todos.filter( todo => { return todo.folder === folder } )
+	return todos.filter( todo => {
+		let todoStart = moment( todo.startTime, "YYYY-MM-DD HH:mm" ).startOf( "day" )
+
+		console.log( todo.title )
+		console.log( todoStart.format() )
+		console.log( moment().startOf( "day" ).format() )
+		console.log( moment().startOf( "day" ).diff( todoStart, "days" ) )
+
+		let dayDiff = todoStart.diff( moment().startOf( "day" ), "days" ) 
+
+		switch ( folder ) {
+			case "today":
+				return dayDiff <= 0
+			case "tomorrow":
+				return dayDiff === 1
+			case "scheduled":
+				return dayDiff >= 2
+			default:
+				return todo.folder === folder && todo.startTime === null
+		}
+	} )
 }
 
 const mapStateToProps = ( state, ownProps ) => {

@@ -33,10 +33,8 @@ import { addTodo } from "./modules/todos"
 store.dispatch( addTodo( { 
 	title: "Do stuff 1",
 	description: "This is description.",
-	estimatedTime: 135,
-	folder:"inbox"
+	estimatedTime: 135
 }, [ "subtask 1", "subtask 2", "subtask 3", "subtask 4", "subtask 5" ] ) )
-store.dispatch( addTodo( { title: "today", folder:"today" } ) )
 
 // import { addEntry } from "./modules/history"
 // history.listen( location => { store.dispatch( addEntry( location.pathname ) ) } )

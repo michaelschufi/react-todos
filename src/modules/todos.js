@@ -13,10 +13,10 @@ export default function todos( state = initialState, action ) {
 				...state,
 				{
 					id: action.id,
-					title: action.todo.title || "",
-					description: action.todo.description || "",
+					title: action.todo.title || null,
+					description: action.todo.description || null,
 					subtasks: action.todo.subtasks || null,
-					estimatedTime: action.todo.estimatedTime || "",
+					estimatedTime: action.todo.estimatedTime || null,
 					deadline: action.todo.deadline || null,
 					startTime: action.todo.startTime || null,
 					folder: action.todo.folder || "inbox",

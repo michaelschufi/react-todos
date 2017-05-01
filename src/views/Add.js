@@ -54,13 +54,13 @@ export class Add extends Component {
 			estimatedTime: ""
 		};
 
-		this.handleBackButtonTap = this.handleBackButtonTap.bind( this ); 
+		this.handleBackButtonTap = this.handleBackButtonTap.bind( this );
 		this.handleSaveTap = this.handleSaveTap.bind( this ); 
 		this.handleSelect = this.handleSelect.bind( this ); 
 	}
 
 	handleBackButtonTap() {
-		browserHistory.push( "/" );
+		browserHistory.goBack();
 	}
 
 	handleSaveTap() {
@@ -72,43 +72,41 @@ export class Add extends Component {
 		}
 
 		let folder = this.state.folder
-
-		if ( folder === "scheduled" ) {
-			let now = moment().startOf( "day" )
-			let startDate = moment( this.state.startDate, "YYYY-MM-DD" )
-			
-			let diff = startDate.diff( now, "days", true )
-			if ( diff === 0 ) {
-				folder = "today" 
-			} else if ( diff === 1 ) {
-				folder = "tomorrow" 
-			}
-		}
-
-		let startTime
-		if ( this.state.startDate && ( 
-				this.state.folder === "today" ||
-				this.state.folder === "tomorrow" ||
-				this.state.folder === "scheduled"
-			) ) {
-			startTime = this.state.startDate + " " + this.state.startTime
-		} else {
-			startTime = moment().format( "YYYY-MM-DD HH:mm" ) 
+		let startDateTime = null
+		if (    folder === "scheduled" ||
+				folder === "today" ||
+				folder === "tomorrow" ) {
+			let startDate = this.state.startDate || ( folder === "tomorrow" ? moment().add( 1, "days" ).format( "YYYY-MM-DD" ) : moment().format( "YYYY-MM-DD" ) )
+			let startTime = this.state.startTime || moment().format( "HH:mm" )
+			startDateTime = moment( startDate + startTime, "YYYY-MM-DDHH:mm" ).format( "YYYY-MM-DD HH:mm" )
 		}
 
 		let deadline = null
 		if ( this.state.startDate ) {
-			deadline = this.state.startDate + " " + this.state.startTime
+			deadline = this.state.deadlineDate + " " + this.state.deadlineTime
 		}
 
 		this.props.addTodo( {
 			title: this.state.title,
 			description: this.state.description,
-			folder: folder,
-			startTime: startTime,
+			startTime: startDateTime,
 			estimatedTime: this.state.estimatedTime,
-			deadline: deadline
+			deadline: deadline,
+			folder: folder
 		}, subtasks )
+
+		this.setState( {
+			typeIcon: FOLDER_ICONS[ "inbox" ],
+			folder: "inbox",
+			title: "",
+			description: "",
+			subtasks: "",
+			estimatedTime: "",
+			startDate: null,
+			startTime: null,
+			deadlineDate: null,
+			deadlineTime: null,
+		} )
 		// browserHistory.push( "/" + folder )
 	}
 
