@@ -3,13 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "body-parser": "^1.17.1",
-    "cors": "^2.8.3",
-    "express": "^4.15.2",
-    "i": "^0.3.5",
     "material-ui": "^0.17.3",
     "moment": "^2.18.1",
-    "npm": "^4.5.0",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
@@ -20,8 +15,7 @@
     "react-router-redux": "^4.0.8",
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0",
-    "sequelize": "^3.30.4"
+    "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -30,13 +24,12 @@
     "eslint": "^3.19.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-react": "^6.10.3",
+    "express": "^4.15.2",
     "jest": "^19.0.2",
-    "react-scripts": "0.9.5",
-    "sqlite3": "^3.1.8"
+    "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "react-scripts start",
-    "api-server": "nodemon ./node_modules/babel-cli/bin/babel-node.js ./src/server.js --presets es2015",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
