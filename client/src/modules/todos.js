@@ -52,7 +52,7 @@ export function addTodo( todo, subtasks ) {
 			id: id,
 			todo: todo
 		} )
-		if( subtasks ) { subtasks.forEach( text => dispatch( addSubtask( id, text ) ) ) }
+		if ( subtasks ) { subtasks.forEach( text => dispatch( addSubtask( id, text ) ) ) }
 	}
 }
 
