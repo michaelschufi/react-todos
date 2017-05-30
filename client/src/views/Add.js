@@ -87,8 +87,8 @@ export class Add extends Component {
 		}
 
 		this.props.addTodo( {
-			title: this.state.title,
-			description: this.state.description,
+			title: this.state.title.trim(),
+			description: this.state.description.trim(),
 			startTime: startDateTime,
 			estimatedTime: this.state.estimatedTime,
 			deadline: deadline,
@@ -119,7 +119,7 @@ export class Add extends Component {
 
 	componentWillMount() {
 		ValidatorForm.addValidationRule( "isEstTimeString", value => {
-			return /^(\d+:\d{1,2}|\d+(\.\d{1,2}))$/.test( value ) || value === ""
+			return /^(\d+((:[0-5]\d)|(\.\d{1,2}))?)$/.test( value ) || value === ""
 		} )
 	}
 
@@ -181,8 +181,8 @@ export class Add extends Component {
 						<FormRow style={ styles.firstRow }>
 							<TextValidator
 								name="title"
-								validators={ [ "required" ] }
-								errorMessages={ [ 'this field is required' ] }
+								validators={ [ "trim" ] }
+								errorMessages={ [ 'Please provide a title.' ] }
 								value={ this.state.title }
 								onChange={ e => this.setState( { title: e.target.value } ) }
 								fullWidth
@@ -238,6 +238,7 @@ export class Add extends Component {
 							<TextValidator
 								name="estimatedTime"
 								validators={ [ "isEstTimeString" ] }
+								errorMessages={ [ 'In hours, e.g. for 90 minutes: "1:30" or "1.5".' ] }
 								value={ this.state.estimatedTime }
 								onChange={ e => this.setState( { estimatedTime: e.target.value } ) }
 								fullWidth
