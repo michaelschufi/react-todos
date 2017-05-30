@@ -1,0 +1,22 @@
+{
+  "name": "react-todos-api",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.2",
+    "lodash": "^4.17.4",
+    "sequelize": "^3.30.4",
+    "sqlite3": "^3.1.8"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "1.0.0",
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0"
+  }
+}
